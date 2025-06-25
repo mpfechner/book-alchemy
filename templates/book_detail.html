@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>{{ book.title }}</title>
+</head>
+<body>
+
+  <h2>{{ book.title }}</h2>
+  <p><strong>Author:</strong> {{ book.author.name }}</p>
+  <p><strong>ISBN:</strong> {{ book.isbn }}</p>
+  <p><strong>Published:</strong> {{ book.publication_year }}</p>
+  {% if book.rating %}
+    <p><strong>Rating:</strong> {{ book.rating }}/10</p>
+  {% endif %}
+  <img src="https://covers.openlibrary.org/b/isbn/{{ book.isbn }}-L.jpg"
+       alt="Cover for {{ book.title }}"
+       onerror="this.style.display='none';">
+
+  <p><a href="{{ url_for('index') }}">Back to Library</a></p>
+
+</body>
+</html>
