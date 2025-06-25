@@ -3,47 +3,60 @@
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="https://cdn.tailwindcss.com"></script>
     <title>Add Book</title>
   </head>
-  <body>
-  {% with messages = get_flashed_messages(with_categories=true) %}
-  {% if messages %}
-    <ul>
-      {% for category, message in messages %}
-        <li><strong>{{ category.capitalize() }}:</strong> {{ message }}</li>
-      {% endfor %}
-    </ul>
-  {% endif %}
-{% endwith %}
+  <body class="bg-blue-50 text-gray-800 font-sans p-8">
+    <div class="max-w-xl mx-auto bg-white rounded-2xl shadow-lg p-6">
 
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+          <ul class="mb-4">
+            {% for category, message in messages %}
+              <li class="text-sm text-{{ 'red' if category == 'error' else 'green' }}-600 font-medium">
+                <strong>{{ category.capitalize() }}:</strong> {{ message }}
+              </li>
+            {% endfor %}
+          </ul>
+        {% endif %}
+      {% endwith %}
 
-  <h1>Add a Book</h1>
+      <h1 class="text-2xl font-bold mb-6">Add a Book</h1>
 
-  <form action="/add_book" method="POST">
-    <label for="title">Title:</label>
-    <input type="text" id="title" name="title" required><br><br>
+      <form action="/add_book" method="POST" class="space-y-4">
+        <div>
+          <label for="title" class="block font-medium">Title:</label>
+          <input type="text" id="title" name="title" required class="w-full mt-1 border border-gray-300 rounded-md p-2">
+        </div>
 
-    <label for="isbn">ISBN:</label>
-    <input type="text" id="isbn" name="isbn" required><br><br>
+        <div>
+          <label for="isbn" class="block font-medium">ISBN:</label>
+          <input type="text" id="isbn" name="isbn" required class="w-full mt-1 border border-gray-300 rounded-md p-2">
+        </div>
 
-    <label for="publication_year">Publication Year:</label>
-    <input type="text" id="publication_year" name="publication_year"><br><br>
+        <div>
+          <label for="publication_year" class="block font-medium">Publication Year:</label>
+          <input type="text" id="publication_year" name="publication_year" class="w-full mt-1 border border-gray-300 rounded-md p-2">
+        </div>
 
-      <label for="rating">Rating (1–10):</label>
-<input type="number" id="rating" name="rating" min="1" max="10"><br><br>
+        <div>
+          <label for="rating" class="block font-medium">Rating (1–10):</label>
+          <input type="number" id="rating" name="rating" min="1" max="10" class="w-full mt-1 border border-gray-300 rounded-md p-2">
+        </div>
 
+        <div>
+          <label for="author_id" class="block font-medium">Author:</label>
+          <select id="author_id" name="author_id" required class="w-full mt-1 border border-gray-300 rounded-md p-2">
+            {% for author in authors %}
+              <option value="{{ author.id }}">{{ author.name }}</option>
+            {% endfor %}
+          </select>
+        </div>
 
-    <label for="author_id">Author:</label>
-    <select id="author_id" name="author_id" required>
-      {% for author in authors %}
-        <option value="{{ author.id }}">{{ author.name }}</option>
-      {% endfor %}
-    </select><br><br>
-
-    <input type="submit" value="Add Book">
-  </form>
-
+        <div>
+          <input type="submit" value="Add Book" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-xl shadow">
+        </div>
+      </form>
+    </div>
   </body>
 </html>
-
