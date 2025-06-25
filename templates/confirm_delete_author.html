@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Confirm Author Deletion</title>
+</head>
+<body>
+
+  <h2>Confirm Deletion</h2>
+  <p>You are about to delete the author <strong>{{ author.name }}</strong>.</p>
+
+  {% if author.books %}
+    <p>This will also delete the following {{ author.books | length }} book(s):</p>
+    <ul>
+      {% for book in author.books %}
+        <li>{{ book.title }}</li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>This author has no books in the system.</p>
+  {% endif %}
+
+  <form method="POST" action="{{ url_for('delete_author', author_id=author.id) }}">
+  <button type="submit" style="color: red; margin-right: 10px;">
+    Yes, delete author and all books
+  </button>
+  <button type="button" onclick="window.location.href='{{ url_for('index') }}'">Cancel</button>
+</form>
+
+
+</body>
+</html>

@@ -100,6 +100,26 @@ def delete_book(book_id):
     return redirect(url_for("index"))
 
 
+@app.route("/author/<int:author_id>/confirm_delete", methods=["GET"])
+def confirm_delete_author(author_id):
+    author = Author.query.get_or_404(author_id)
+    return render_template("confirm_delete_author.html", author=author)
+
+@app.route("/author/<int:author_id>/delete", methods=["POST"])
+def delete_author(author_id):
+    author = Author.query.get_or_404(author_id)
+    books = author.books
+
+    for book in books:
+        db.session.delete(book)
+
+    db.session.delete(author)
+    db.session.commit()
+
+    flash(f"Author '{author.name}' and {len(books)} book(s) deleted.", "success")
+    return redirect(url_for("index"))
+
+
 if __name__ == "__main__":
     with app.app_context():
         #db.create_all()
