@@ -1,4 +1,5 @@
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 db = SQLAlchemy()
 
@@ -7,10 +8,12 @@ class Author(db.Model):
     """
     Author model with optional birth and death dates.
     """
-    id: int = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    name: str = db.Column(db.String, nullable=False)
-    birth_date: str = db.Column(db.String, nullable=True)
-    date_of_death: str = db.Column(db.String, nullable=True)
+    id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
+    name: Mapped[str] = mapped_column(nullable=False)
+    birth_date: Mapped[str] = mapped_column(nullable=True)
+    date_of_death: Mapped[str] = mapped_column(nullable=True)
+
+    books: Mapped[list["Book"]] = relationship("Book", back_populates="author")
 
     def __repr__(self) -> str:
         return f"<Author {self.name}>"
@@ -23,15 +26,14 @@ class Book(db.Model):
     """
     Book model including basic metadata and a relationship to an author.
     """
-    id: int = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    isbn: str = db.Column(db.String, nullable=False)
-    title: str = db.Column(db.String, nullable=False)
-    publication_year: str = db.Column(db.String, nullable=True)
-    author_id: int = db.Column(db.Integer, db.ForeignKey('author.id'), nullable=False)
-    rating: int = db.Column(db.Integer, nullable=True)  # 1–10 scale (optional)
+    id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
+    isbn: Mapped[str] = mapped_column(nullable=False)
+    title: Mapped[str] = mapped_column(nullable=False)
+    publication_year: Mapped[str] = mapped_column(nullable=True)
+    author_id: Mapped[int] = mapped_column(db.ForeignKey("author.id"), nullable=False)
+    rating: Mapped[int] = mapped_column(nullable=True)  # 1–10 scale (optional)
 
-    # Establish relationship with Author
-    author: Author = db.relationship("Author", backref="books")
+    author: Mapped["Author"] = relationship("Author", back_populates="books")
 
     def __repr__(self) -> str:
         return f"<Book {self.title}>"
