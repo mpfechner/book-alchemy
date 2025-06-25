@@ -7,6 +7,16 @@
     <title>Add Book</title>
   </head>
   <body>
+  {% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    <ul>
+      {% for category, message in messages %}
+        <li><strong>{{ category.capitalize() }}:</strong> {{ message }}</li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+{% endwith %}
+
 
   <h1>Add a Book</h1>
 

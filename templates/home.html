@@ -6,6 +6,14 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
   </head>
   <body>
+    <form method="GET" action="/">
+  <input type="text" name="q" placeholder="Search books..." value="{{ search_query }}">
+  <select name="sort">
+    <option value="title" {% if sort_by == 'title' %}selected{% endif %}>Sort by Title</option>
+    <option value="author" {% if sort_by == 'author' %}selected{% endif %}>Sort by Author</option>
+  </select>
+  <button type="submit">Search</button>
+</form>
 
     {% for book in books %}
         <div>

@@ -11,10 +11,27 @@ app.config["SECRET_KEY"] = "this-is-my-secret-key"
 db.init_app(app)
 
 
-@app.route("/")
+@app.route("/", methods=["GET"])
 def index():
-    books = Book.query.all()
-    return render_template("home.html", books=books)
+    search_query = request.args.get("q", "").strip()
+    sort_by = request.args.get("sort", "title")
+
+    # Grund-Query
+    query = Book.query.join(Author)
+
+    # 🔍 Filter, falls Suchbegriff vorhanden
+    if search_query:
+        search = f"%{search_query}%"
+        query = query.filter(Book.title.ilike(search))
+
+    # ↕️ Sortierung
+    if sort_by == "author":
+        query = query.order_by(Author.name)
+    else:
+        query = query.order_by(Book.title)
+
+    books = query.all()
+    return render_template("home.html", books=books, search_query=search_query, sort_by=sort_by)
 
 
 @app.route("/add_author", methods=["GET", "POST"])
