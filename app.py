@@ -61,6 +61,8 @@ def add_book():
         isbn = request.form.get("isbn")
         publication_year = request.form.get("publication_year")
         author_id = request.form.get("author_id")
+        rating = request.form.get("rating")
+        rating = int(rating) if rating else None
 
         if not title or not isbn or not author_id:
             flash("Missing required fields!", "error")
@@ -70,7 +72,8 @@ def add_book():
             title=title,
             isbn=isbn,
             publication_year=publication_year,
-            author_id=int(author_id)
+            author_id=int(author_id),
+            rating=rating
         )
         db.session.add(new_book)
         db.session.commit()
